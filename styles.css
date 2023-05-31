@@ -1,0 +1,21 @@
+.buttons {
+    margin-bottom: 20px;
+  }
+  
+  .day-btn {
+    padding: 5px 10px;
+    margin-right: 5px;
+  }
+  
+  #calendar {
+    margin-bottom: 20px;
+  }
+  
+  #results {
+    font-size: 18px;
+  }
+  
+  #results ul {
+    list-style-type: none;
+  }
+  
