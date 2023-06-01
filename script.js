@@ -28,12 +28,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     for (let year = currentYear; year <= currentYear + 10; year++) {
       for (let month = 0; month < 12; month++) {
-        const date = new Date(year, month, 1);
-        while (date.getDay() !== day) {
-          date.setDate(date.getDate() + 1);
-        }
-        if (date.getMonth() === month) {
-          selectedDates.push(date);
+        const date = new Date(year, month, day);
+        if (date.getDay() === day && date.getMonth() === month) {
+          selectedDates.push(new Date(date));
         }
       }
     }
@@ -51,8 +48,12 @@ document.addEventListener("DOMContentLoaded", function() {
     for (let year = currentYear; year <= currentYear + 10; year++) {
       const date = new Date(selectedDate);
       date.setFullYear(year);
-      if (date.getFullYear() === year) {
-        selectedDates.push(date);
+      if (
+        date.getFullYear() === year &&
+        date.getDate() === selectedDate.getDate() &&
+        date.getMonth() === selectedDate.getMonth()
+      ) {
+        selectedDates.push(new Date(date));
       }
     }
 
@@ -66,25 +67,30 @@ document.addEventListener("DOMContentLoaded", function() {
       dates.sort(function(a, b) {
         return a.getTime() - b.getTime();
       });
-
-      const formattedDates = dates.map(formatDate);
-      const pairedDates = [];
-
-      for (let i = 0; i < formattedDates.length; i++) {
-        if (i % 2 === 0) {
-          pairedDates.push(`${formattedDates[i]}`);
-        } else {
-          pairedDates.push(`${formattedDates[i - 1]}\n${formattedDates[i]}`);
+  
+      let i = 0;
+      while (i < dates.length) {
+        const date1 = dates[i];
+        const date2 = dates[i + 1];
+  
+        const formattedDate1 = formatDate(date1);
+        const formattedDate2 = date2 ? formatDate(date2) : "";
+  
+        const li1 = document.createElement("li");
+        li1.textContent = formattedDate1;
+        resultsList.appendChild(li1);
+  
+        if (date2) {
+          const li2 = document.createElement("li");
+          li2.textContent = formattedDate2;
+          resultsList.appendChild(li2);
         }
+  
+        i += 2; // Move to the next pair
       }
-
-      pairedDates.forEach(function(pair) {
-        const li = document.createElement("li");
-        li.innerHTML = pair;
-        resultsList.appendChild(li);
-      });
     }
   }
+  
 
   function formatDate(date) {
     const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -98,4 +104,5 @@ document.addEventListener("DOMContentLoaded", function() {
     return `${dayOfWeek}, ${month} ${day}, ${year}`;
   }
 });
+
 
